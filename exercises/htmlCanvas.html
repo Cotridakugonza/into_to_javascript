@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Bouncy rect</title>
+    <style></style>
+</head>
+
+<body>
+    <canvas id="gameCanvas" width="600" height="700"></canvas>
+    <script>
+        // declare variables
+        const FPS = 30;//frames/second
+        var bs = 30;//ball size
+        var bx, by;//ball x & y location to move the ball accross the screen
+        var xv, yv;// velocity of the ball how fast the ball shall move
+        var canvas, context;//canvas variable
+        
+        // load canvas
+        canvas = document.getElementById("gameCanvas");
+        context = canvas.getContext("2d");
+
+        // set up interval (game loop)
+        setInterval(update, 1000 / FPS);//calls something every amount set of time 
+        
+        // ball starting position
+        bx = canvas.width / 2;
+        by = canvas.height / 2;
+        
+        // random ball starting speed (between 25 and 100 pps)
+        xv = Math.floor(Math.random() * 76 + 25) / FPS;
+        yv = Math.floor(Math.random() * 76 + 25) / FPS;
+        
+        // random ball direction 
+        if (Math.floor(Math.random() * 2) == 0) {
+            xv = -xv;//meaning it will be going to the other direction of xv 
+        }
+        if (Math.floor(Math.random() * 2) == 0) {
+            yv = -yv;
+        }
+        
+        // update function
+        function update() {
+            // move the ball
+            bx += xv;
+            by += yv;
+            
+            // bounce the ball off each wall
+            if (bx - bs / 2 < 0 && xv < 0) {
+                xv = -xv;//this reverses x-direction
+                
+            }
+            if (bx + bs / 2 > canvas.width && xv > 0) {
+                xv = -xv;
+            }
+            if (by - bs / 2 < 0 && yv < 0) {
+                yv = -yv;//reverses y-direction
+            }
+            if (by + bs / 2 > canvas.height && yv > 0) {
+                yv = -yv;
+            }
+            
+            // draw background and ball
+            context.fillStyle = "black";
+            context.fillRect(0, 0, canvas.width, canvas.height);
+            context.fillStyle = "yellow";
+            
+            context.fillRect(bx - bs / 2, by - bs / 2, bs, bs);
+        }    //calculation to set the size of the ball
+    </script>
+</body>
+
+</html>
