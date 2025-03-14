@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            background-image: url(./Dom/history1.jpg),
+            url(sciencequiz.avif);
+           
+           
+        }
+        .quiz-container {
+            width: 50%;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px gray;
+            margin-top: 30px;
+        }
+        .question {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .options label {
+            display: block;
+            margin: 5px 0;
+            cursor: pointer;
+        }
+        .btn {
+            margin-top: 15px;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+        .btn-next { background-color: #28a745; color: white; }
+        .btn-prev { background-color: #007bff; color: white; }
+        .btn-submit { background-color: #dc3545; color: white; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h2>Quiz App</h2>
+        <div id="quiz-content">
+            
+            <p id="timer">Time left: <span id="time">15</span> sec</p>
+            <div class="question" id="question"></div>
+            <div class="options" id="options"></div>
+            <button class="btn btn-prev hidden" onclick="prevQuestion()">Previous</button>
+            <button class="btn btn-next" onclick="nextQuestion()">Next</button>
+            <button class="btn btn-submit hidden" onclick="submitQuiz()">Submit</button>
+        </div>
+        <div id="result" class="hidden"></div>
+    </div>
+
+    <script>
+       
+        const quizData = [
+            { question: "Who was the first President of the USA?", options: ["Abraham Lincoln", "George Washington", "John Adams", "Thomas Jefferson"], answer: "George Washington", category: "history" },
+            { question: "In which year did World War II end?", options: ["1942", "1945", "1939", "1950"], answer: "1945", category: "history" },
+            { question: "Who discovered America?", options: ["Christopher Columbus", "Marco Polo", "Vasco da Gama", "James Cook"], answer: "Christopher Columbus", category: "history" },
+            { question: "Which empire built the Great Wall of China?", options: ["Mongol Empire", "Qin Dynasty", "Ottoman Empire", "Roman Empire"], answer: "Qin Dynasty", category: "history" },
+            { question: "Who wrote 'The Communist Manifesto'?", options: ["Karl Marx", "Adam Smith", "John Locke", "Plato"], answer: "Karl Marx", category: "history" },
+            { question: "What is the chemical symbol for water?", options: ["H2O", "O2", "CO2", "HO"], answer: "H2O", category: "science" },
+            { question: "What planet is known as the Red Planet?", options: ["Mars", "Venus", "Jupiter", "Saturn"], answer: "Mars", category: "science" },
+            { question: "Who developed the theory of relativity?", options: ["Isaac Newton", "Albert Einstein", "Galileo Galilei", "Nikola Tesla"], answer: "Albert Einstein", category: "science" },
+            { question: "What is the powerhouse of the cell?", options: ["Nucleus", "Mitochondria", "Ribosome", "Cytoplasm"], answer: "Mitochondria", category: "science" },
+            { question: "Which element has the atomic number 1?", options: ["Helium", "Oxygen", "Hydrogen", "Carbon"], answer: "Hydrogen", category: "science" }
+        ];
+
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+        let timer;
+        let timeLeft = 15;
+
+        function loadQuestion() {
+            clearInterval(timer);
+            timeLeft = 15;
+            document.getElementById("time").innerText = timeLeft;
+            startTimer();
+
+            let questionObj = quizData[currentQuestionIndex];
+            document.getElementById("question").innerText = questionObj.question;
+            document.getElementById("options").innerHTML = questionObj.options.map(option => 
+                `<label>
+                    <input type="radio" name="answer" value="${option}" ${userAnswers[currentQuestionIndex] === option ? "checked" : ""}>
+                    ${option}
+                </label>`).join("");
+
+                document.body.style.backgroundImage = questionObj.category === "history"? url("history1.jpg"):"blue";
+               
+            // document.body.style.background = questionObj.category === "history" ? "brown" : "blue";
+
+            document.querySelector(".btn-prev").classList.toggle("hidden", currentQuestionIndex === 0);
+            document.querySelector(".btn-next").classList.toggle("hidden", currentQuestionIndex === quizData.length - 1);
+            document.querySelector(".btn-submit").classList.toggle("hidden", currentQuestionIndex !== quizData.length - 1);
+        }
+
+        function startTimer() {
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById("time").innerText = timeLeft;
+                if (timeLeft <= 0) {
+                    nextQuestion();
+                }
+            }, 1000);
+        }
+
+        function nextQuestion() {
+            let selectedAnswer = document.querySelector("input[name='answer']:checked");
+            if (selectedAnswer) {
+                userAnswers[currentQuestionIndex] = selectedAnswer.value;
+            }
+
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion();
+            }
+        }
+
+        function submitQuiz() {
+            let selectedAnswer = document.querySelector("input[name='answer']:checked");
+            if (selectedAnswer) {
+                userAnswers[currentQuestionIndex] = selectedAnswer.value;
+            }
+
+            let score = 0;
+            quizData.forEach((q, index) => {
+                if (userAnswers[index] === q.answer) {
+                    score++;
+                }
+            });
+
+            document.getElementById("quiz-content").classList.add("hidden");
+            document.getElementById("result").classList.remove("hidden");
+            document.getElementById("result").innerHTML = `<h2>Your Score: ${score} / 10</h2>`;
+            document.body.style.background = "teal";
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
+
+
