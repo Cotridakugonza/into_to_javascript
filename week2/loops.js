@@ -3,18 +3,27 @@ while loop
 do while loop
 for of loop - arrays
 for in loop - objects
-a graph that represents a loop online
 */
 
 //for loop
+
+for(initialize,condition,increment)
+    
 for(let number =0;number<5; number++){
-    console.log(`${number}*${number} =${number*number}`);
+    console.log(`${number}*${number}=${number*number}`);
 }
 
-let numbers =[1,2,3,5];
-let sum =0;
-
-for(let i=0;i<numbers.length;i++){
-sum=sum+numbers[i]
-
+while (condition) {
+    // Code to execute
 }
+
+let n = 0;
+let x = 0;
+while (n < 3) {
+  n++;
+  x += n;
+}
+
+//https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration
+
+
