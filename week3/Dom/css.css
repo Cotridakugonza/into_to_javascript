@@ -1,0 +1,18 @@
+button{
+    background-color: coral ;
+    border-radius: 50px;
+    padding: 5px;
+    justify-content: space-between;
+}
+button:hover{ background:linear-gradient(lawngreen,coral);
+    transition: 2ms;
+}
+li{
+    display: flex;
+    justify-content: center;
+    padding: 5%;
+    list-style: none;
+}
+p{
+    justify-content: space-around;
+}
